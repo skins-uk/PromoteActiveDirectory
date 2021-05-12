@@ -5,7 +5,10 @@ param (
     $SuppliedPass,
     [Parameter()]
     [String]
-    $UserNum    
+    $UserNum,
+    [Parameter()]
+    [String]
+    $SAPass    
 )
 #Setup Variables
 $DCRoot = ([ADSI]"").distinguishedName
@@ -25,3 +28,5 @@ for ($User = 1; $User -eq $UserNum; $User++)
     $User
     New-ADUser -Name "Student$($User) Account" -AccountPassword $password -DisplayName "Student$($User) Account" -Enabled $True -Path "OU=Users,$($WVDRoot)" -SamAccountName "Student$($User)" -Surname "Student$($User)" -UserPrincipalName "Student$($User)@$($DCUSERDNSDOMAIN)"    
 }
+
+.\UserMapDrive.ps1 -SuppliedPass $SuppliedPass -SAPass $SAPass
