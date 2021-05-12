@@ -30,3 +30,4 @@ for ($User = 1; $User -eq $UserNum; $User++)
 }
 
 .\UserMapDrive.ps1 -SuppliedPass $SuppliedPass -SAPass $SAPass
+c:\temp\AzureADConnect.msi
