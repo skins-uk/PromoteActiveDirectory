@@ -20,6 +20,8 @@ New-ADOrganizationalUnit -Name "Service Accounts" -Path "$($WVDRoot)" -Protected
 New-ADOrganizationalUnit -Name "Servers" -Path "$($WVDRoot)" -ProtectedFromAccidentalDeletion $False -Description "WVD Servers"
 New-ADOrganizationalUnit -Name "Session Hosts" -Path "$($WVDRoot)" -ProtectedFromAccidentalDeletion $False -Description "WVD WVD Session Hosts"
 #Create Student Accounts within Domain
-foreach ($User in $UserNum) {
+for ($User = 1; $User -eq $UserNum; $User++)
+{
+    $User
     New-ADUser -Name "Student$($User) Account" -AccountPassword $password -DisplayName "Student$($User) Account" -Enabled $True -Path "OU=Users,$($WVDRoot)" -SamAccountName "Student$($User)" -Surname "Student$($User)" -UserPrincipalName "Student$($User)@$($DCUSERDNSDOMAIN)"    
 }
