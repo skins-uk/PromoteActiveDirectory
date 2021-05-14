@@ -9,17 +9,20 @@ param(
 
 )
 
-$cimSession = New-CimSession -ComputerName wvd-vm1
+
 [securestring]$StuPass = ConvertTo-SecureString $SuppliedPass -AsPlainText -Force
 
 $Students=(Get-aduser -filter {name -like "Student*"} | select SamAccountName).SamAccountName
 foreach($Student in $Students){
 [pscredential]$StuCred = New-Object System.Management.Automation.PSCredential ($Student, $StuPass)
-Invoke-Command -ComputerName wvd-vm1 `
+$wvdvms = (Get-ADComputer -Filter {name -like "wvd-vm*"}).name
+Invoke-Command -ComputerName $wvdvms `
     -ScriptBlock { 
         net localgroup Administrators $using:Student /add
 
     }
+Foreach($wvdvm in $wvdvms){
+    $cimSession = New-CimSession -ComputerName $wvdvm
     # Create a scheduled task action to call the cmdkey command
     $sta = New-ScheduledTaskAction "cmdkey" `
                 -Argument ("/add:trainingdatasa.file.core.windows.net /user:Azure\trainingdatasa /pass:$($SAPass)") `
@@ -38,13 +41,13 @@ Invoke-Command -ComputerName wvd-vm1 `
      
     # Clean up the remote environment
     Get-ScheduledTask -TaskName "cmdKeySvcAccnt" -CimSession $cimSession | Unregister-ScheduledTask -Confirm:$false
-    
-    Invoke-Command -ComputerName wvd-vm1 `
-    -ScriptBlock { 
-        net localgroup Administrators $using:Student /delete
-    }
 }
-Invoke-Command -ComputerName wvd-vm1 -ScriptBlock { 
+Invoke-Command -ComputerName $wvdvms `
+-ScriptBlock { 
+    net localgroup Administrators $using:Student /delete
+}
+}
+Invoke-Command -ComputerName $wvdvms -ScriptBlock { 
     $Command= '"New-PSDrive -Name Z -PSProvider FileSystem -Root \\trainingdatasa.file.core.windows.net\trainingdata -Persist"'
                 set-content "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\MapDrive.bat" -Value "powershell -command $($Command)"
 }
