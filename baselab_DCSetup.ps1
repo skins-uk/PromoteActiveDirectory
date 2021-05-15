@@ -3,8 +3,9 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 #Set PowerShel to use TLS 1.2
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
 #Install Az.DesktopVirtualization and configure Start Virtual Machine on resource group and host pool
-Install-Module -Name Az.DesktopVirtualization -RequiredVersion 2.1.0
-Install-Module -Name Az
+Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
+Install-Module -Name Az.DesktopVirtualization -RequiredVersion 2.1.0 -force
+Install-Module -Name Az -force
 #Choco install and Choco Apps
 iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install googlechrome -y
