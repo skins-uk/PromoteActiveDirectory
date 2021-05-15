@@ -30,4 +30,4 @@ for ($User = 1; $User -le $UserNum; $User++)
 }
 
 .\UserMapDrive.ps1 -SuppliedPass $SuppliedPass -SAPass $SAPass
-c:\temp\AzureADConnect.msi
+.\Config-StartVMConnect.ps1 -resourcegroupname "demolabv1-region1infra" -hostpoolname "demolab-hp1" -Tenant "c20e7f31-4c70-4ead-bbcf-f3ed7a4c7ef8" -SubscriptionId "51ab7e41-69c6-4182-b561-fd2fb2ffed1d"
