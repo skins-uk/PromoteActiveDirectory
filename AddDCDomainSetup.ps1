@@ -22,7 +22,12 @@ write-output $DomainAcc
 write-output $DomainNB
 
 $password = ConvertTo-SecureString $DomainPass -AsPlainText -Force
-[pscredential]$credObject = New-Object System.Management.Automation.PSCredential ("$($DomainNB)\\$($DomainAcc)", $password)
+[pscredential]$credObject = New-Object System.Management.Automation.PSCredential ("$($DomainNB)\$($DomainAcc)", $password)
+
+write-output $credObject.GetNetworkCredential().username
+write-output $credObject.GetNetworkCredential().password
+
+
 Import-Module ADDSDeployment
 Install-ADDSDomainController `
 -DomainName $DomainFQDN `
