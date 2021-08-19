@@ -12,7 +12,7 @@ param (
 do {
   Write-Host "waiting..."
   sleep 3
-} until(Test-NetConnection $DomainFQDN | ? { $_.TcpTestSucceeded } )
+} until(Test-NetConnection $DomainFQDN | ? PingSucceeded )
 
 $password = ConvertTo-SecureString $DomainPass -AsPlainText -Force
 [pscredential]$credObject = New-Object System.Management.Automation.PSCredential ($DomainAcc, $password)
