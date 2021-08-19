@@ -14,12 +14,15 @@ do {
   sleep 3
 } until(Test-NetConnection $DomainFQDN | ? PingSucceeded )
 
+$DomainNB=$DomainFQDN.split(".")[0]
+
 write-output $DomainPass
 write-output $DomainFQDN
 write-output $DomainAcc
+write-output $DomainNB
 
 $password = ConvertTo-SecureString $DomainPass -AsPlainText -Force
-[pscredential]$credObject = New-Object System.Management.Automation.PSCredential ($DomainAcc, $password)
+[pscredential]$credObject = New-Object System.Management.Automation.PSCredential ("$($DomainNB)\\$($DomainAcc)", $password)
 Import-Module ADDSDeployment
 Install-ADDSDomainController `
 -DomainName $DomainFQDN `
