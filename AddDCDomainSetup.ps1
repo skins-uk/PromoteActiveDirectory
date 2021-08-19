@@ -27,4 +27,5 @@ Install-ADDSDomainController `
 -LogPath "E:\windows\NTDS" `
 -NoRebootOnCompletion:$false `
 -SysvolPath "E:\windows\SYSVOL" `
+-SiteName "Default-First-Site-Name" `
 -Force:$true
