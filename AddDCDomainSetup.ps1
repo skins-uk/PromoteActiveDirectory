@@ -5,21 +5,22 @@ param (
     $DomainPass,
     [Parameter()]
     [String]
-    $DomainFQDN
+    $DomainFQDN,
+    [String]
+    $DomainAcc
 )
-$DomainNB = $DomainFQDN.Split(".")[0]
+
 $password = ConvertTo-SecureString $DomainPass -AsPlainText -Force
+[pscredential]$credObject = New-Object System.Management.Automation.PSCredential ($DomainAcc, $password)
 Import-Module ADDSDeployment
 Install-ADDSDomainController `
--CreateDnsDelegation:$false `
--DatabasePath "E:\windows\NTDS" `
--DomainMode "WinThreshold" `
 -DomainName $DomainFQDN `
--DomainNetbiosName $DomainNB `
--ForestMode "WinThreshold" `
+-SafeModeAdministratorPassword: $password `
+-CreateDnsDelegation:$false `
+-Credential $credObject `
+-DatabasePath "E:\windows\NTDS" `
 -InstallDns:$true `
 -LogPath "E:\windows\NTDS" `
 -NoRebootOnCompletion:$false `
 -SysvolPath "E:\windows\SYSVOL" `
--Force:$true `
--SafeModeAdministratorPassword: $password
+-Force:$true
