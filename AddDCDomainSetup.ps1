@@ -14,6 +14,11 @@ do {
   sleep 3
 } until(Test-NetConnection $DomainFQDN | ? PingSucceeded )
 
+do {
+    sleep 3
+    write-output "Finding Domain Controller..."
+} until($SourceDC=Get-ADDomainController -DomainName $DomainFQDN -Discover -Site "Default-First-Site-Name" -ErrorAction SilentlyContinue)
+
 $DomainNB=$DomainFQDN.split(".")[0]
 
 write-output $DomainPass
@@ -39,5 +44,6 @@ Install-ADDSDomainController `
 -LogPath "E:\windows\NTDS" `
 -NoRebootOnCompletion:$false `
 -SysvolPath "E:\windows\SYSVOL" `
+-ReplicationSourceDC $SourceDC.HostName `
 -SiteName "Default-First-Site-Name" `
 -Force:$true
