@@ -15,7 +15,7 @@ do {
 } until(Test-NetConnection $DomainFQDN | ? PingSucceeded )
 
 do {
-    sleep 3
+    sleep 600
     write-output "Finding Domain Controller..."
 } until($SourceDC=Get-ADDomainController -DomainName $DomainFQDN -Discover -Site "Default-First-Site-Name" -ErrorAction SilentlyContinue)
 
