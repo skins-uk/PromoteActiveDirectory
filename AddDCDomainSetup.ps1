@@ -44,6 +44,6 @@ Install-ADDSDomainController `
 -LogPath "E:\windows\NTDS" `
 -NoRebootOnCompletion:$false `
 -SysvolPath "E:\windows\SYSVOL" `
--ReplicationSourceDC $SourceDC.HostName `
+-ReplicationSourceDC $SourceDC.HostName[0] `
 -SiteName "Default-First-Site-Name" `
 -Force:$true
